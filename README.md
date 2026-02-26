@@ -434,10 +434,8 @@ Privacy-compliant, aggregated crop holding pattern data sold to FMCG companies a
 
 | Member | Role |
 |---|---|
-| **[Your Name]** | Full Stack Development + Forecasting Engine |
-| **[Teammate 2]** | Frontend + UI/UX + Multilingual System |
-| **[Teammate 3]** | Backend + Firebase + Twilio Integration |
-| **[Teammate 4]** | Research + Business Model + Presentation |
+| **Muhammad Haashim** | Full Stack Development + Project Implementation |
+| **Mohammed Zulkifl Salih** | Documentation |
 
 *Sahyadri College of Engineering & Management, Mangaluru*
 
