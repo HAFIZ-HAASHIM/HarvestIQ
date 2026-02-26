@@ -1,0 +1,15 @@
+# Node modules
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# Environment variables
+.env
+server/.env
+client/.env
+
+# Firebase private key
+server/serviceAccountKey.json
+
+# Logs
+*.log

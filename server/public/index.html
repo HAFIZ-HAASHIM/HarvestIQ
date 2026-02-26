@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HarvestIQ - Smart Crop Intelligence</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Georgia&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/styles.css">
+
+  <!-- CDN Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo-group">
+        <div class="logo-icon">
+          <i data-lucide="leaf"></i>
+        </div>
+        <div class="logo-text">
+          <h1 data-i18n="app.name">Harvest<span>IQ</span></h1>
+          <p data-i18n="app.tagline">Smart Crop Intelligence</p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:1rem; align-items:center;">
+        <div class="live-badge">
+          <i data-lucide="activity"></i>
+          <span data-i18n="app.live_badge">Live Agmarknet Data</span>
+        </div>
+
+        <!-- Language Switcher -->
+        <div class="lang-switcher" id="langSwitcher">
+          <button class="lang-current" id="langToggle">
+            <span id="langFlag">🌐</span>
+            <span id="langLabel">EN</span>
+            <span class="lang-arrow">▾</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown" style="display:none">
+            <div class="lang-option" data-lang="en">
+              <span class="lang-check" id="check-en">✓</span>
+              <span class="lang-native">English</span>
+            </div>
+            <div class="lang-option" data-lang="hi">
+              <span class="lang-check" id="check-hi"></span>
+              <span class="lang-native">हिंदी</span>
+              <span class="lang-english">Hindi</span>
+            </div>
+            <div class="lang-option" data-lang="kn">
+              <span class="lang-check" id="check-kn"></span>
+              <span class="lang-native">ಕನ್ನಡ</span>
+              <span class="lang-english">Kannada</span>
+            </div>
+            <div class="lang-option" data-lang="mr">
+              <span class="lang-check" id="check-mr"></span>
+              <span class="lang-native">मराठी</span>
+              <span class="lang-english">Marathi</span>
+            </div>
+            <div class="lang-option" data-lang="te">
+              <span class="lang-check" id="check-te"></span>
+              <span class="lang-native">తెలుగు</span>
+              <span class="lang-english">Telugu</span>
+            </div>
+            <div class="lang-option" data-lang="ta">
+              <span class="lang-check" id="check-ta"></span>
+              <span class="lang-native">தமிழ்</span>
+              <span class="lang-english">Tamil</span>
+            </div>
+            <div class="lang-option" data-lang="gu">
+              <span class="lang-check" id="check-gu"></span>
+              <span class="lang-native">ગુજરાતી</span>
+              <span class="lang-english">Gujarati</span>
+            </div>
+            <div class="lang-option" data-lang="pa">
+              <span class="lang-check" id="check-pa"></span>
+              <span class="lang-native">ਪੰਜਾਬੀ</span>
+              <span class="lang-english">Punjabi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="toast-container"></div>
+
+    <!-- Top Controls Section -->
+    <section class="controls-section">
+      <div class="selector-card glass-card">
+        <h2 data-i18n="selector.select_crop">Market Selection</h2>
+        <div class="selectors-grid">
+
+          <div class="input-group">
+            <label data-i18n="selector.select_crop">Crop</label>
+            <select id="crop-select">
+              <option value="Tomato" data-i18n="crops.tomato">Tomato</option>
+              <option value="Wheat" data-i18n="crops.wheat">Wheat</option>
+              <option value="Rice (Paddy)" data-i18n="crops.rice">Rice (Paddy)</option>
+              <option value="Onion" data-i18n="crops.onion">Onion</option>
+              <option value="Maize" data-i18n="crops.maize">Maize</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label data-i18n="selector.nearest_mandi">Nearest Mandi</label>
+            <select id="mandi-select">
+              <option value="Mangaluru">Mangaluru</option>
+              <option value="Hubli">Hubli</option>
+              <option value="Pune">Pune</option>
+              <option value="Nashik">Nashik</option>
+              <option value="Azadpur Delhi">Azadpur Delhi</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label data-i18n="selector.quantity_label">Quantity (Quintals)</label>
+            <div class="input-wrapper">
+              <input type="number" id="qty-input" value="20" min="1"
+                data-i18n-placeholder="selector.quantity_placeholder">
+              <span class="suffix">Qtl</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Weather Badge -->
+      <div class="weather-card glass-card" id="weather-card">
+        <div class="weather-loader animate-pulse">Checking storage risks...</div>
+      </div>
+    </section>
+
+    <!-- Tab Navigation -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" data-target="insights-view" data-i18n="forecast.tab_label">Insights</button>
+      <button class="tab-btn" data-target="storage-view" data-i18n="storage.tab_label">Storage</button>
+      <button class="tab-btn" data-target="alerts-view" data-i18n="alert.tab_label">Alerts</button>
+    </nav>
+
+    <!-- Views Container -->
+    <div class="views-container">
+
+      <!-- INSIGHTS VIEW -->
+      <section id="insights-view" class="view active fade-in">
+        <div class="insights-grid">
+
+          <!-- Left Col -->
+          <div class="insights-left">
+            <!-- Live Price -->
+            <div class="price-layer glass-card" id="live-price-card">
+              <div class="decorative-blob"></div>
+              <div class="price-header">
+                <div>
+                  <h3 data-i18n="price.live_price">Today's Live Price</h3>
+                  <p class="updater"><span class="pulse-dot"></span>Updated <span id="price-time">--:--</span></p>
+                </div>
+                <div class="icon-box"><i data-lucide="indian-rupee"></i></div>
+              </div>
+              <div class="price-body">
+                <div class="price-large">
+                  <span id="live-price-val">₹--</span>
+                  <span class="unit" data-i18n="price.per_quintal">/ quintal</span>
+                </div>
+                <div class="price-footer">
+                  <span><span data-i18n="price.total_value_today">Total Value</span> (<span id="total-qty">--</span>
+                    Qtl)</span>
+                  <span id="total-value-val" class="highlight-val">₹--</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Forecast Box -->
+            <div class="forecast-layer glass-card" id="forecast-card">
+              <h2 data-i18n="forecast.tab_label">AI Price Forecast Engine</h2>
+              <div class="forecast-stats">
+                <div class="stat-row">
+                  <i data-lucide="clock" class="text-info"></i>
+                  <span><span id="f-wait-txt">Wait up to</span> <strong id="f-wait-days">-- days</strong></span>
+                </div>
+                <div class="stat-row">
+                  <i data-lucide="trending-up" class="text-leaf"></i>
+                  <span><span data-i18n="forecast.probability_of_increase">Probability of increase</span>: <strong
+                      id="f-prob">--%</strong></span>
+                </div>
+                <div class="stat-row">
+                  <i data-lucide="indian-rupee" class="text-harvest"></i>
+                  <div>
+                    <span data-i18n="forecast.expected_price_range">Expected range</span>:
+                    <div class="range-val" id="f-range">₹-- – ₹--</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confidence Bar -->
+              <div class="confidence-section">
+                <div class="conf-header">
+                  <span data-i18n="forecast.forecast_confidence">Confidence Score</span>
+                  <span id="conf-score-text" class="score-text">--%</span>
+                </div>
+                <div class="bar-bg">
+                  <div class="bar-fill" id="conf-bar-fill">
+                    <div class="bar-glow"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="income-box glass-panel">
+                <p data-i18n="forecast.extra_income">Your extra income potential:</p>
+                <div class="income-val" id="f-extra-income">₹-- – ₹-- more</div>
+                <p class="income-sub" id="f-qty-text">on your <span id="f-qty">--</span> quintals</p>
+              </div>
+
+              <div class="risk-box">
+                <i data-lucide="alert-triangle"></i>
+                <p><strong data-i18n="forecast.risk_notice">Risk:</strong> <span id="f-risk-text-full">--</span></p>
+              </div>
+
+              <div class="recommendation-badge" id="rec-badge">
+                <i data-lucide="check-circle"></i>
+                <div style="width: 100%;">
+                  <div class="rec-title"><span data-i18n="price.recommendation">Recommendation</span>: <span
+                      id="rec-text">--</span></div>
+                  <div class="rec-sub" id="rec-sub-text" data-i18n="price.sell_today_if_cash">(Sell today only if cash
+                    urgently needed)</div>
+
+                  <button class="speak-btn" id="speakBtn" style="margin-top:0.75rem;" onclick="speakRecommendation()">
+                    🔊 <span data-i18n="forecast.speak_label">Listen</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Col -->
+          <div class="insights-right glass-card">
+            <h3 data-i18n="forecast.chart_title">Price Trend & 30-Day Forecast</h3>
+            <div class="chart-container">
+              <canvas id="priceChart"></canvas>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <div class="line leaf-line"></div> <span data-i18n="forecast.actual_price">Historical (Past 14
+                  Days)</span>
+              </div>
+              <div class="legend-item">
+                <div class="line harvest-line"></div> <span data-i18n="forecast.predicted">AI Forecast (Next 30
+                  Days)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- STORAGE VIEW -->
+      <section id="storage-view" class="view">
+        <div class="storage-grid" id="storage-content">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ALERTS VIEW -->
+      <section id="alerts-view" class="view">
+        <div class="alerts-container">
+          <div class="glass-card alerts-card" id="alert-form-container">
+            <i data-lucide="bell-ring" class="bg-icon"></i>
+            <h3><i data-lucide="bell-ring" class="text-harvest"></i> <span data-i18n="alert.tab_label">SMS Price
+                Alerts</span></h3>
+            <p id="alert-desc-text">We'll text you immediately when <span id="alert-crop">Crop</span> passes your target
+              price at <span id="alert-mandi">Mandi</span> mandi.</p>
+
+            <form id="alert-form">
+              <div class="input-group">
+                <label data-i18n="alert.target_price_label">Target Sell Price (₹/Quintal)</label>
+                <div class="input-wrapper">
+                  <i data-lucide="indian-rupee" class="input-icon"></i>
+                  <input type="number" id="alert-price" required min="1">
+                </div>
+              </div>
+              <div class="input-group">
+                <label data-i18n="alert.phone_label">Mobile Number</label>
+                <div class="input-wrapper">
+                  <i data-lucide="smartphone" class="input-icon"></i>
+                  <input type="tel" id="alert-phone" required data-i18n-placeholder="alert.phone_placeholder">
+                </div>
+              </div>
+              <button type="submit" class="alert-submit-btn" id="alert-submit-btn">
+                <span data-i18n="alert.set_alert_button">Set Alert <i data-lucide="bell-ring"></i></span>
+              </button>
+            </form>
+          </div>
+
+          <div class="glass-card alerts-card hidden text-center" id="alert-success-container">
+            <div class="success-icon-wrapper">
+              <div class="icon-glow"></div>
+              <i data-lucide="check-circle-2"></i>
+            </div>
+            <h2 data-i18n="alert.success_title">Alert Activated!</h2>
+            <p id="alert-success-text">We're monitoring Agmarknet. You'll get an SMS at <strong
+                id="success-phone"></strong>.</p>
+            <div class="success-details glass-panel">
+              <div class="detail-row"><span>Crop</span><span id="success-crop"></span></div>
+              <div class="detail-row"><span>Mandi</span><span id="success-mandi"></span></div>
+              <div class="detail-row"><span>Target Price</span><span class="text-harvest font-bold"
+                  id="success-target"></span></div>
+            </div>
+            <button id="reset-alert-btn" class="reset-btn"><span data-i18n="alert.set_alert_button">Set Another
+                Alert</span> <i data-lucide="arrow-right"></i></button>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Translation Dictionaries -->
+  <script src="/locales/en.js"></script>
+  <script src="/locales/hi.js"></script>
+  <script src="/locales/kn.js"></script>
+  <script src="/locales/mr.js"></script>
+  <script src="/locales/te.js"></script>
+  <script src="/locales/ta.js"></script>
+  <script src="/locales/gu.js"></script>
+  <script src="/locales/pa.js"></script>
+
+  <!-- Internal Services -->
+  <script src="/js/i18n.js"></script>
+  <script src="/js/app.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      initI18n();
+    });
+  </script>
+</body>
+
+</html>
