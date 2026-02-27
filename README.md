@@ -435,7 +435,7 @@ Privacy-compliant, aggregated crop holding pattern data sold to FMCG companies a
 | Member | Role |
 |---|---|
 | **Muhammad Haashim** | Full Stack Development + Project Implementation |
-| **Mohammed Zulkifl Salih** | Documentation |
+| **Aboobakker Siddiq** | Documentation |
 
 *Sahyadri College of Engineering & Management, Mangaluru*
 
